@@ -12,3 +12,11 @@ snippet containsfu table.contains function
 		end
 		return false;
 	end
+
+snippet roundfu math.round function
+	---Rounds and returns `number` 
+	---@param number number
+	---@return integer
+	function math.round(number)
+		return math.floor(number + .5);
+	end

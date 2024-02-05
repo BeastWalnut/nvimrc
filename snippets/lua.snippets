@@ -1,0 +1,14 @@
+snippet containsfu table.contains function
+	---Returns true if `tbl` contains `val`
+	---@param tbl table
+	---@param val any
+	---@return boolean
+	function table.contains(tbl, val)
+		---@diagnostic disable-next-line: no-unknown
+		for _, v in pairs(tbl) do
+			if v == val then
+				return true;
+			end
+		end
+		return false;
+	end

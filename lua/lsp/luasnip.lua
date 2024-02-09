@@ -28,9 +28,8 @@ return {
 			{ "s", "i" },
 		})
 
-		require("luasnip.loaders.from_vscode").lazy_load({ path = "./vssnips" })
-		require("luasnip.loaders.from_lua").lazy_load({ path = "./luasnips" })
-		require("luasnip.loaders.from_snipmate").lazy_load({ path = "./snippets" })
+		require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./vssnips" } })
+		require("luasnip.loaders.from_lua").lazy_load({ paths = { "./luasnips" } })
+		require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" } })
 	end,
 }
-

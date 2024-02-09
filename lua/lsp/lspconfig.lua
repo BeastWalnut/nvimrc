@@ -61,16 +61,7 @@ return {
 			lua_ls = function()
 				lspconfig["lua_ls"].setup({
 					capabilities = capabilities,
-					on_init = function(client)
-						local path = vim.loop.cwd()
-						if path == vim.fn.stdpath("config") then
-							client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-								Lua = { workspace = { library = { vim.env.VIMRUNTIME } } },
-							})
-							client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-							return true
-						end
-					end,
+					before_init = require("neodev.lsp").before_init,
 					settings = {
 						Lua = {
 							format = {

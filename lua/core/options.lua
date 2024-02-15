@@ -72,9 +72,3 @@ autocmd("TextYankPost", {
 		})
 	end,
 })
-autocmd({ "BufRead", "BufNewFile" }, {
-	pattern = "*.snippets",
-	callback = function(ev)
-		vim.cmd [[set filetype=snippets]]
-	end
-})

@@ -21,16 +21,41 @@ return {
 				},
 			},
 		},
-		lsp = {
-			ensure_installed = {
-				"efm",
-				"lua_ls",
-				"eslint",
-				"jsonls",
-				"jdtls",
-				"tsserver",
-				"rust_analyzer",
+		servers = {
+			efm = {},
+			lua_ls = {
+				settings = {
+					Lua = {
+						format = {
+							enable = true,
+							defaultConfig = {
+								indent_style = "tab",
+								indent_size = "4",
+							}
+						},
+						completion = { callSnippet = "Replace", },
+						diagnostics = {
+							-- ["codestyle-check"] = "Opened",
+							neededFileStatus = { ["no-unknown"] = "Opened", },
+							groupSeverity = {
+								duplicate = "Error",
+								ambiguity = "Error",
+								strong = "Error",
+								["type-check"] = "Opened",
+							},
+							severity = { ["ambiguity-1"] = "Warning!", },
+							unusedLocalExclude = { "_*" },
+						},
+					}
+				}
 			},
+			eslint = {},
+			jsonls = {},
+			jdtls = {},
+			tsserver = {},
+			rust_analyzer = {},
+		},
+		lsp = {
 			automatic_installation = true,
 		},
 		tool_installer = {
@@ -45,48 +70,25 @@ return {
 		local mason = require("mason")
 		mason.setup(opts.mason)
 
+		opts.lsp.ensure_installed = vim.tbl_keys(opts.servers)
 		local mason_lspconfig = require("mason-lspconfig")
 		mason_lspconfig.setup(opts.lsp)
 
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
 		local capabilities = cmp_nvim_lsp.default_capabilities()
 
+		local servers = opts.servers
+		servers.lua_ls = {
+			before_init = require("neodev.lsp").before_init,
+		}
+
+
 		local lspconfig = require("lspconfig")
 		mason_lspconfig.setup_handlers({
 			function(name)
-				lspconfig[name].setup({
-					capabilities = capabilities,
-				})
-			end,
-			lua_ls = function()
-				lspconfig["lua_ls"].setup({
-					capabilities = capabilities,
-					before_init = require("neodev.lsp").before_init,
-					settings = {
-						Lua = {
-							format = {
-								enable = true,
-								defaultConfig = {
-									indent_style = "tab",
-									indent_size = "4",
-								}
-							},
-							completion = { callSnippet = "Replace", },
-							diagnostics = {
-								-- ["codestyle-check"] = "Opened",
-								neededFileStatus = { ["no-unknown"] = "Opened", },
-								groupSeverity = {
-									duplicate = "Error",
-									ambiguity = "Error",
-									strong = "Error",
-									["type-check"] = "Opened",
-								},
-								severity = { ["ambiguity-1"] = "Warning!", },
-								unusedLocalExclude = { "_*" },
-							},
-						}
-					}
-				})
+				local server = servers[name] or {}
+				server.capabilities = capabilities
+				lspconfig[name].setup(server)
 			end,
 			rust_analyzer = function() end,
 		})

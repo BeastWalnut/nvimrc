@@ -1,23 +1,18 @@
 return {
 	{
-		"bluz71/vim-nightfly-guicolors",
-		name = "nightfly",
-		lazy = true,
-	},
-	{
 		"olimorris/onedarkpro.nvim",
 		name = "onedark-pro",
-		lazy = true,
-	},
-	{
-		"FelipeLema/jellybeans.vim",
-		name = "jellybeans",
-		lazy = true,
+		lazy = false,
 	},
 	{
 		"catppuccin/nvim",
 		name = "catpuccin",
-		lazy = true,
+		lazy = false,
+	},
+	{
+		"rebelot/kanagawa.nvim",
+		name = "kanagawa",
+		lazy = false,
 	},
 	{
 		"rose-pine/neovim",

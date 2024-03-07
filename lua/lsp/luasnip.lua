@@ -1,6 +1,5 @@
 return {
 	"L3MON4D3/LuaSnip",
-	lazy = true,
 	version = "v2.*",
 	run = "make install_jsregexp",
 	dependencies = {
@@ -28,7 +27,7 @@ return {
 			{ "s", "i" },
 		})
 
-		require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./vssnips" } })
+		require("luasnip.loaders.from_vscode").lazy_load()
 		require("luasnip.loaders.from_lua").lazy_load({ paths = { "./luasnips" } })
 		require("luasnip.loaders.from_snipmate").lazy_load({ paths = { "./snippets" } })
 	end,

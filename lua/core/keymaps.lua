@@ -19,6 +19,10 @@ function Set_map(keymaps, opts)
 	keymaps.name = name
 end
 
+-- VimRegex helpers
+vim.keymap.set("n", "<leader>qr", [[:%s/\<<C-r><C-w>\>/]])
+vim.keymap.set("c", ";\\", [[\(\)<left><left>]]) -- Insert \(\) to regex
+
 -- Move highlighted lines up and down
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })

@@ -11,7 +11,7 @@ return {
 		ensure_installed = {
 			"lua",
 			"javascript",
-			"typescript",
+			-- "typescript",
 			"java",
 			"rust",
 		},
@@ -43,4 +43,3 @@ return {
 		require("nvim-treesitter.configs").setup(opts)
 	end,
 }
-

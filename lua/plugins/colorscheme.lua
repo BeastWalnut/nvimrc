@@ -2,16 +2,11 @@ return {
 	{
 		"olimorris/onedarkpro.nvim",
 		name = "onedark-pro",
-		lazy = false,
+		lazy = true,
 	},
 	{
 		"catppuccin/nvim",
 		name = "catpuccin",
-		lazy = false,
-	},
-	{
-		"rebelot/kanagawa.nvim",
-		name = "kanagawa",
 		lazy = false,
 	},
 	{

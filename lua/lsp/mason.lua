@@ -9,6 +9,7 @@ return {
 		return {
 			tool_installer = {
 				ensure_installed = {
+					"prettierd",
 					"prettier",
 					"stylua",
 					"eslint_d",
@@ -16,13 +17,11 @@ return {
 			},
 			servers = {
 				lua_ls = {},
-				eslint = {},
 				jsonls = {},
 				tsserver = {},
 				rust_analyzer = {},
-				efm = {},
 			},
-			lsp = {}
+			lsp = {},
 		}
 	end,
 	config = function(_, opts)
@@ -34,7 +33,7 @@ return {
 					package_pending = "➜",
 					package_uninstalled = "✗",
 				},
-			}
+			},
 		})
 
 		local servers = opts.servers

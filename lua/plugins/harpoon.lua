@@ -2,11 +2,11 @@ return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
 	keys = {
-		{ "<leader>hh", desc = "[h] [H]arpoon" },
-		{ "<leader>ha", desc = "[H]arpoon [A]dd" },
-		{ "]h",         desc = "Next [H]arpoon" },
-		{ "[h",         desc = "Previous [H]arpoon" },
-		{ "gh",         desc = "[H]arpoon [G]o to <count>" },
+		{ "<leader>hh", desc = "(Harpoon) Toggle" },
+		{ "<leader>ha", desc = "(Harpoon) [A]dd" },
+		{ "]h", desc = "(Harpoon) Next" },
+		{ "[h", desc = "(Harpoon) Previous" },
+		{ "gh", desc = "(Harpoon) [G]o to" },
 	},
 	dependencies = { "nvim-lua/plenary.nvim" },
 	opts = {
@@ -41,15 +41,15 @@ return {
 
 		Set_map({
 			name = "Harpoon",
-			h = { toggle_menu, "[h] [H]arpoon" },
-			a = { add_to_list, "[H]arpoon [A]dd" },
-		}, {
-			prefix = "<leader>h",
-			noremap = true,
-		})
+			h = { toggle_menu, "Toggle" },
+			a = { add_to_list, "[A]dd" },
+		}, { prefix = "<leader>h" })
 
-		vim.keymap.set("n", "]h", next_harp, { desc = "Next [H]arpoon" })
-		vim.keymap.set("n", "[h", prev_harp, { desc = "Prev [H]arpoon" })
-		vim.keymap.set("n", "gh", select_harp, { desc = "[G]o [H]arpoon at <count>" })
+		Set_map({
+			name = "Harpoon",
+			["]h"] = { next_harp, "Next" },
+			["[h"] = { prev_harp, "Previous" },
+			["gh"] = { select_harp, "[G]o to" },
+		})
 	end,
 }

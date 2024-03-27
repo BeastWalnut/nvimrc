@@ -21,8 +21,9 @@ return {
 		end
 
 		Set_map({
-			["<M-k>"] = { next_snip, desc = "Jump to next snip" },
-			["<M-j>"] = { prev_snip, desc = "Jump to prev snip" },
+			name = "Luasnip",
+			["<M-k>"] = { next_snip, "Next" },
+			["<M-j>"] = { prev_snip, "Previous" },
 		}, {
 			{ "s", "i" },
 		})

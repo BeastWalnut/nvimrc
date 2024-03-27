@@ -1,22 +1,23 @@
 function Set_map(keymaps, opts)
-	local name = keymaps.name
-	keymaps.name = nil
-
-	local mode = opts[1] or "n"
+	opts = opts or {}
+	local name
+	if keymaps.name then
+		name = "(" .. keymaps.name .. ") "
+		keymaps.name = nil
+	else
+		name = ""
+	end
+	local mode = opts.mode or opts[1] or "n"
 	local prefix = opts.prefix or ""
 	opts[1] = nil
+	opts.mode = nil
 	opts.prefix = nil
 
-	for key, keymap in pairs(keymaps) do
-		opts.desc = keymap[2]
-		vim.keymap.set(mode, prefix .. key, keymap[1], opts)
+	keymaps.name = nil
+	for keys, km in pairs(keymaps) do
+		local nopts = vim.tbl_extend("force", opts, { desc = name .. km[2] })
+		vim.keymap.set(mode, prefix .. keys, km[1], nopts)
 	end
-
-	opts.desc = nil
-	opts[1] = mode
-	opts.prefix = prefix
-
-	keymaps.name = name
 end
 
 -- VimRegex helpers
@@ -24,15 +25,23 @@ vim.keymap.set("n", "<leader>qr", [[:%s/\<<C-r><C-w>\>/]])
 vim.keymap.set("c", ";\\", [[\(\)<left><left>]]) -- Insert \(\) to regex
 
 -- Move highlighted lines up and down
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true })
+Set_map({
+	K = { ":m '<-2<Cr>gv=gv", "Move hightlight up" },
+	J = { ":m '>+1<Cr>gv=gv", "Move hightlight down" },
+}, {
+	"v",
+	silent = true,
+	noremap = true,
+})
 
 -- Remove \n without moving the cursor
-vim.keymap.set("n", "J", "mzJ`z")
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line", noremap = true })
 
 -- Move half a screen up/down
-vim.keymap.set("n", "<C-d>", "<C-d>zz")
-vim.keymap.set("n", "<C-u>", "<C-u>zz")
+Set_map({
+	["<C-u>"] = { "<C-u>zz", "Hafl screen up" },
+	["<C-d>"] = { "<C-d>zz", "Half Screen down" },
+}, { noremap = true })
 
 -- vim.keymap.set("n", "N", "Nzzzv")
 -- vim.keymap.set("n", "n", "nzzzv")
@@ -44,89 +53,62 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.keymap.set("n", "<leader><leader>", "<cmd>so<CR>", { desc = "Source" })
 
 -- Exit insert mode
-vim.keymap.set("i", "jk", "<Esc>", { desc = "Exit Insert mode" })
-vim.keymap.set("i", "kj", "<Esc>", { desc = "Exit Insert mode" })
+Set_map({
+	jk = { "<Esc>", "Exit insert mode" },
+	kj = { "<Esc>", "Exit insert mode" },
+}, { "i" })
 
 -- Create/Delete Split windows
-local window = {
-	maps = {
-		name = "Splits",
-		v = { "<C-w>v", "[S]plit [V]ertically" },
-		h = { "<C-w>s", "[S]plit [H]orizontally" },
-		e = { "<C-w>=", "[S]plit [E]qualize" },
-		q = { "<cmd>close<CR>", "[S]plit [Q]" },
-	},
-	opts = {
-		prefix = "<leader>s",
-		noremap = true,
-		silent = true,
-	},
-}
+Set_map({
+	name = "Splits",
+	v = { "<C-w>v", "[V]ertically" },
+	h = { "<C-w>s", "[H]orizontally" },
+	e = { "<C-w>=", "[E]qualize" },
+	q = { "<cmd>close<CR>", "[Q]uit" },
+}, {
+	prefix = "<leader>s",
+	noremap = true,
+	silent = true,
+})
 
-local window_nav = {
-	maps = {
-		name = "Split Nav",
-		["<C-h>"] = { "<C-w>h", "Move to left window" },
-		["<C-j>"] = { "<C-w>j", "Go to window below" },
-		["<C-k>"] = { "<C-w>k", "Go to window above" },
-		["<C-l>"] = { "<C-w>l", "Move to right window" },
-	},
-	opts = {
-		{ "n", "t" },
-		noremap = true,
-	},
-}
+-- Splits/Window navigation
+Set_map({
+	name = "Split Nav",
+	["<C-h>"] = { "<C-w>h", "Left" },
+	["<C-j>"] = { "<C-w>j", "Down" },
+	["<C-k>"] = { "<C-w>k", "Up" },
+	["<C-l>"] = { "<C-w>l", "Right" },
+}, {
+	{ "n", "t" },
+	noremap = true,
+})
 
 -- Clipboard Interactions
-local clip = {
-	maps = {
-		y = { '"+y', "Clip [Y]ank" },
-		x = { "x", "Yank [x]" },
-	},
-	opts = {
-		{ "n", "v" },
-		prefix = "<leader>",
-		noremap = true,
-	},
-}
+Set_map({
+	y = { '"+y', "[Y]ank clipboard" },
+	x = { "x", "Yank [x]" },
+}, {
+	{ "n", "v" },
+	prefix = "<leader>",
+	noremap = true,
+})
 
 -- Void copy/paste
-local void = {
-	maps = {
-		name = "Void",
-		D = { [["_d]], "void [D]" },
-		x = { [["_x]], "void [X]" },
-		["<leader>p"] = { [["_dP"]], "void [p]" },
-	},
-	opts = {
-		{ "n", "v" },
-		noremap = true,
-	},
-}
+Set_map({
+	name = "Void",
+	D = { [["_d]], "[D]elete" },
+	x = { [["_x]], "X" },
+	["<leader>p"] = { [["_dP"]], "[p]" },
+}, {
+	{ "n", "v" },
+	noremap = true,
+})
 
--- Numbers
-local numbers = {
-	maps = {
-		["+"] = { "<C-a>", "Increment Num" },
-		["-"] = { "<C-x>", "Decrement Num" },
-	},
-	opts = {
-		prefix = "<leader>",
-		noremap = true,
-	},
-}
-
-Set_map(window.maps, window.opts)
-Set_map(window_nav.maps, window_nav.opts)
-Set_map(clip.maps, clip.opts)
-Set_map(void.maps, void.opts)
-Set_map(numbers.maps, numbers.opts)
-
-return {
-	-- buffer,
-	window,
-	window_nav,
-	clip,
-	void,
-	numbers,
-}
+-- Number Interactions
+Set_map({
+	["+"] = { "<C-a>", "Increment Num" },
+	["-"] = { "<C-x>", "Decrement Num" },
+}, {
+	prefix = "<leader>",
+	noremap = true,
+})

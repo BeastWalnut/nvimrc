@@ -3,7 +3,6 @@ return {
 	dependencies = {
 		"williamboman/mason.nvim",
 		"hrsh7th/cmp-nvim-lsp",
-		"fole/neodev.nvim",
 		"nvim-telescope/telescope.nvim",
 	},
 	event = { "BufReadPre", "BufNewFile" },
@@ -23,30 +22,31 @@ return {
 					K = { vim.lsp.buf.hover, "Cursor Doc" },
 				}, map_opts)
 
-				map_opts[1] = "i"
+				map_opts.mode = "i"
 				Set_map({
 					["<C-h>"] = { vim.lsp.buf.signature_help, "Open lsp help" },
 				}, map_opts)
 
-				map_opts[1] = "n"
+				map_opts.mode = "n"
 				Set_map({
-					["[d"] = { vim.diagnostic.goto_prev, "Previous diagnostic" },
-					["]d"] = { vim.diagnostic.goto_next, "Next diagnostic" },
+					name = "Diagnostic",
+					["]d"] = { vim.diagnostic.goto_next, "Next" },
+					["[d"] = { vim.diagnostic.goto_prev, "Previous" },
 				}, map_opts)
 
 				map_opts.prefix = "g"
 				Set_map({
-					d = { "<cmd>Telescope lsp_definitions<CR>", "Peek cursor [D]eclaration" },
+					d = { "<cmd>Telescope lsp_definitions<CR>", "Peek [D]eclaration" },
 					D = { vim.lsp.buf.declaration, "[G]o [D]eclaration" },
-					i = { "<cmd>Telescope lsp_implementations<CR>", "Peek cursor [I]mplementation" },
+					i = { "<cmd>Telescope lsp_implementations<CR>", "Peek [I]mplementation" },
 					I = { vim.lsp.buf.implementation, "[G]o [I]mplementation" },
-					r = { vim.lsp.buf.references, "Cursor [R]eferences" },
+					r = { vim.lsp.buf.references, "Peek [R]eferences" },
 				}, map_opts)
 
-				map_opts[1] = { "n", "v" }
+				map_opts.mode = { "n", "v" }
 				map_opts.prefix = "<leader>"
 				Set_map({
-					ca = { vim.lsp.buf.code_action, "Show [C]ode [A]ctions" },
+					ca = { vim.lsp.buf.code_action, "[C]ode [A]ctions" },
 					rn = { vim.lsp.buf.rename, "Cursor [R]ename" },
 					e = { vim.diagnostic.open_float, "Cursor Diagnostic" },
 				}, map_opts)

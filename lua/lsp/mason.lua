@@ -19,7 +19,6 @@ return {
 				lua_ls = {},
 				jsonls = {},
 				tsserver = {},
-				rust_analyzer = {},
 			},
 			lsp = {},
 		}
@@ -52,7 +51,6 @@ return {
 				server.capabilities = capabilities
 				require("lspconfig")[name].setup(server)
 			end,
-			rust_analyzer = function() end,
 		})
 		require("mason-tool-installer").setup(opts.tool_installer)
 	end,

@@ -61,6 +61,7 @@ return {
 					luasnip.lsp_expand(args.body)
 				end,
 			},
+			---@diagnostic disable-next-line: missing-fields
 			confirmation = { completeopt = "menu,menuone,noselect" },
 			mapping = cmp.mapping.preset.insert({
 				["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
@@ -71,6 +72,7 @@ return {
 				["<C-e>"] = cmp.mapping.abort(),
 				["<CR>"] = cmp.mapping.confirm({ select = true }),
 			}),
+			---@diagnostic disable-next-line: missing-fields
 			formatting = {
 				fields = { "abbr", "kind", "menu" },
 				format = function(entry, vim_item)
@@ -87,11 +89,11 @@ return {
 
 					local source = entry.source.name
 					if source == "luasnip" or source == "nvim_lsp" then
-						vim_item.dup = 0
+						vim_item.dup = nil
 					end
 
 					return vim_item
-				end
+				end,
 			},
 			sources = cmp.config.sources({
 				{ name = "luasnip" },

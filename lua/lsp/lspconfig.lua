@@ -4,7 +4,6 @@ return {
 		"williamboman/mason.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 		"fole/neodev.nvim",
-
 		"nvim-telescope/telescope.nvim",
 	},
 	event = { "BufReadPre", "BufNewFile" },
@@ -17,46 +16,39 @@ return {
 				local map_opts = {
 					noremap = true,
 					buffer = e.buf,
-					prefix = "g",
 				}
 
 				Set_map({
-					d = { "<cmd>Telescope lsp_definitions<CR>", "Peek cursor [D]eclaration" },
-					D = { vim.lsp.buf.declaration, "Go to [D]eclaration" },
-					i = { "<cmd>Telescope lsp_implementations<CR>", "Peek cursor [I]mplementation" },
-					I = { vim.lsp.buf.implementation, "Go to [I]mplementation" },
-					r = { vim.lsp.buf.references, "Cursor [R]e[f]erences" },
-				}, map_opts)
-
-				map_opts.prefix = "<leader>c"
-				Set_map({
-					name = "Lsp",
-					d = { vim.diagnostic.open_float, "[C]ursor [D]iagnostic" },
-					f = { vim.lsp.buf.format, "[C]ode [F]ormat" },
-				}, map_opts)
-
-				map_opts[1] = { "n", "v" }
-				Set_map({
-					name = "Lsp",
-					a = { vim.lsp.buf.code_action, "Show [C]ode [A]ctions" },
-				}, map_opts)
-
-				map_opts.prefix = "<leader>"
-				Set_map({
-					r = { vim.lsp.buf.rename, "[C]ursor [R]ename" },
-					k = { vim.lsp.buf.hover, "[C]ursor Doc" },
+					["<M-q>"] = { vim.lsp.buf.format, "Code Format" },
+					K = { vim.lsp.buf.hover, "Cursor Doc" },
 				}, map_opts)
 
 				map_opts[1] = "i"
-				map_opts.prefix = nil
 				Set_map({
 					["<C-h>"] = { vim.lsp.buf.signature_help, "Open lsp help" },
 				}, map_opts)
 
-				map_opts[1] = nil
+				map_opts[1] = "n"
 				Set_map({
-					["[d"] = { vim.diagnostic.goto_prev, "Jumpt to prev diagnostic" },
-					["]d"] = { vim.diagnostic.goto_next, "Jump to next diagnostic" },
+					["[d"] = { vim.diagnostic.goto_prev, "Previous diagnostic" },
+					["]d"] = { vim.diagnostic.goto_next, "Next diagnostic" },
+				}, map_opts)
+
+				map_opts.prefix = "g"
+				Set_map({
+					d = { "<cmd>Telescope lsp_definitions<CR>", "Peek cursor [D]eclaration" },
+					D = { vim.lsp.buf.declaration, "[G]o [D]eclaration" },
+					i = { "<cmd>Telescope lsp_implementations<CR>", "Peek cursor [I]mplementation" },
+					I = { vim.lsp.buf.implementation, "[G]o [I]mplementation" },
+					r = { vim.lsp.buf.references, "Cursor [R]eferences" },
+				}, map_opts)
+
+				map_opts[1] = { "n", "v" }
+				map_opts.prefix = "<leader>"
+				Set_map({
+					ca = { vim.lsp.buf.code_action, "Show [C]ode [A]ctions" },
+					rn = { vim.lsp.buf.rename, "Cursor [R]ename" },
+					e = { vim.diagnostic.open_float, "Cursor Diagnostic" },
 				}, map_opts)
 
 				local lsp_format = augroup("LspFormat", {})
@@ -64,7 +56,9 @@ return {
 				autocmd("BufWritePre", {
 					group = lsp_format,
 					buffer = e.buf,
-					callback = function() vim.lsp.buf.format() end
+					callback = function()
+						vim.lsp.buf.format()
+					end,
 				})
 			end,
 		})

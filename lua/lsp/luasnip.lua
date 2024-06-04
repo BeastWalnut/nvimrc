@@ -26,6 +26,7 @@ return {
 			["<M-j>"] = { prev_snip, "Previous" },
 		}, {
 			{ "s", "i" },
+			noremap = true,
 		})
 
 		require("luasnip.loaders.from_vscode").lazy_load()

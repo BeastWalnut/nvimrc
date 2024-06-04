@@ -1,5 +1,5 @@
 return {
 	"folke/neodev.nvim",
-	ft = { "lua" },
+	lazy = true,
 	opts = { pathStrict = true },
 }

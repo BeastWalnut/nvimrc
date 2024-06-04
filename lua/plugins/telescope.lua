@@ -9,48 +9,41 @@ return {
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	keys = {
-		{ "<leader>ff", "<cmd>Telescope find_files<CR>",   desc = "[F]ind [F]iles" },
-		{ "<leader>fs", "<cmd>Telescope live_grep<CR>",    desc = "[F]ind [S]tring" },
-		{ "<leader>fc", "<cmd>Telescope grep_string<CR>",  desc = "[F]ind [C]ursor string" },
-		{ "<leader>fb", "<cmd>Telescope buffers<CR>",      desc = "[F]ind [B]uffers" },
-		{ "<leader>fg", "<cmd>Telescope git_files<CR>",    desc = "[F]ind [G]it files" },
-		{ "<leader>fk", "<cmd>Telescope keymaps<CR>",      desc = "[F]ind [K]eymaps" },
-		{ "<leader>fh", "<cmd>Telescope help_tags<CR>",    desc = "[F]ind [H]elp" },
-		{ "<leader>e",  "<cmd>Telescope file_browser<CR>", desc = "File [E]xplore" },
+		{ "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "(Find) [F]iles" },
+		{ "<leader>fs", "<cmd>Telescope live_grep<CR>", desc = "(Find) [S]tring" },
+		{ "<leader>fc", "<cmd>Telescope grep_string<CR>", desc = "(Find) [C]ursor string" },
+		{ "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "(Find) [B]uffers" },
+		{ "<leader>fg", "<cmd>Telescope git_files<CR>", desc = "(Find) [G]it files" },
+		{ "<leader>fk", "<cmd>Telescope keymaps<CR>", desc = "(Find) [K]eymaps" },
+		{ "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "(Find) [H]elp" },
+		{ "<leader>fe", "<cmd>Telescope file_browser<CR>", desc = "(Find) [E]xplore" },
 	},
-	opts = {
-		extensions = {},
-		pickers = {
-			find_files = {
-				follow = true
+	opts = function()
+		local actions = require("telescope.actions")
+		return {
+			extensions = {
+				file_browser = {
+					mappings = {
+						i = { ["<bs>"] = false },
+						n = { l = actions.select_default },
+					},
+				},
 			},
-		},
-	},
+			defaults = {
+				path_display = { shorten = 3 },
+				mappings = {
+					i = {
+						["<C-k>"] = actions.move_selection_previous,
+						["<C-j>"] = actions.move_selection_next,
+						["<C-q>"] = actions.add_selected_to_qflist + actions.open_qflist,
+					},
+				},
+			},
+			pickers = { find_files = { follow = true } },
+		}
+	end,
 	config = function(_, opts)
 		local telescope = require("telescope")
-		local actions = require("telescope.actions")
-
-		opts.extensions.file_browser = {
-			mappings = {
-				i = {
-					["<bs>"] = false,
-				},
-				n = {
-					l = actions.select_default,
-				},
-			},
-		}
-
-		opts.defaults = {
-			path_display = { shorten = 3 },
-			mappings = {
-				i = {
-					["<C-k>"] = actions.move_selection_previous,
-					["<C-j>"] = actions.move_selection_next,
-					["<C-q>"] = actions.add_selected_to_qflist + actions.open_qflist,
-				},
-			},
-		}
 		telescope.setup(opts)
 
 		telescope.load_extension("fzf")

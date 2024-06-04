@@ -5,25 +5,28 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},
-	opts = function()
-		return {
-			tool_installer = {
-				ensure_installed = {
-					"prettierd",
-					"prettier",
-					"stylua",
-					"eslint_d",
+	opts = {
+		lua_ls = {
+			settings = {
+				Lua = {
+					diagnostics = {
+						neededFileStatus = { ["no-unkown"] = "Opened" },
+						groupSeverity = {
+							duplicate = "Error",
+							ambiguity = "Error",
+							strong = "Error",
+							["type-check"] = "Error",
+						},
+						severity = { ["ambiguity-1"] = "Warning!" },
+						unusedLocalExclude = { "_*" },
+					},
 				},
 			},
-			servers = {
-				lua_ls = {},
-				jsonls = {},
-				tsserver = {},
-			},
-			lsp = {},
-		}
-	end,
-	config = function(_, opts)
+		},
+		jsonls = {},
+		tsserver = {},
+	},
+	config = function(_, servers)
 		local mason = require("mason")
 		mason.setup({
 			ui = {
@@ -35,12 +38,10 @@ return {
 			},
 		})
 
-		local servers = opts.servers
-
-		opts.lsp.ensure_installed = vim.tbl_keys(servers)
 		local mason_lspconfig = require("mason-lspconfig")
 		mason_lspconfig.setup({
 			automatic_installation = true,
+			ensure_installed = vim.tbl_keys(servers),
 		})
 
 		local cmp_nvim_lsp = require("cmp_nvim_lsp")
@@ -52,6 +53,13 @@ return {
 				require("lspconfig")[name].setup(server)
 			end,
 		})
-		require("mason-tool-installer").setup(opts.tool_installer)
+		require("mason-tool-installer").setup({
+			ensure_installed = {
+				"prettierd",
+				"prettier",
+				"stylua",
+				"eslint_d",
+			},
+		})
 	end,
 }

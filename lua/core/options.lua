@@ -14,33 +14,28 @@ opt.tabstop = 4
 opt.softtabstop = 0
 opt.shiftwidth = 0
 opt.expandtab = false
-opt.smartindent = true
-opt.copyindent = true
+opt.smartindent = false
 
 -- Spelling and word detection
 opt.ignorecase = true
 opt.smartcase = true
--- opt.spell = true
 
 opt.undodir = vim.fn.stdpath("data") .. "\\undo"
 opt.undofile = true
 opt.swapfile = false
-opt.backup = false
 
 -- Search highlights
 opt.incsearch = true
 opt.hlsearch = false
 
 -- GUI
--- opt.listchars = "leadmultispace:»   ,eol:↲"
+opt.guifont = "JetBrainsMonoNL NFM15"
 opt.listchars = {
+	trail = "#",
 	tab = "│ ",
-	trail = "«",
-	space = "·",
-	eol = "↲"
+	eol = "↲",
 }
 opt.list = true
-opt.guifont = "JetBrainsMonoNL NFM15"
 
 opt.termguicolors = true
 opt.signcolumn = "yes"
@@ -53,10 +48,10 @@ opt.backspace = "indent,eol,start"
 opt.scrolloff = 8
 
 local autocmd = vim.api.nvim_create_autocmd
-local personal_group = vim.api.nvim_create_augroup("PersonalGroup", {})
+local opt_group = vim.api.nvim_create_augroup("PersonalGroup", { clear = true })
 
 autocmd("BufEnter", {
-	group = personal_group,
+	group = opt_group,
 	callback = function()
 		vim.opt.formatoptions:remove({ "r", "o" })
 		vim.opt_local.formatoptions:remove({ "r", "o" })
@@ -64,11 +59,11 @@ autocmd("BufEnter", {
 })
 
 autocmd("TextYankPost", {
-	group = personal_group,
+	group = opt_group,
 	callback = function()
 		vim.highlight.on_yank({
 			higroup = "Visual",
-			timeout = 300,
+			timeout = 250,
 		})
 	end,
 })

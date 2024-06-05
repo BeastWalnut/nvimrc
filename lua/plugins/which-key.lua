@@ -12,8 +12,8 @@ return {
 		local keymap = {
 			a = { name = "Automata" },
 			t = { name = "Trouble" },
-			u = { name = "UndoTree" },
 			h = { name = "Harpoon" },
+			u = { name = "Undo" },
 			f = { name = "Find" },
 			c = { name = "Lsp" },
 		}

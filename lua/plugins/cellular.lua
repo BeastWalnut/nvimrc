@@ -1,8 +1,11 @@
 return {
 	"eandrju/cellular-automaton.nvim",
-	keys = {
-		{ "<leader>ar", "<cmd>CellularAutomaton make_it_rain<CR>", desc = "[A]utomaton [R]ain" },
-		{ "<leader>al", "<cmd>CellularAutomaton game_of_life<CR>", desc = "[A]utomaton [L]ife" },
-	},
+	name = "automaton",
+	keys = Gen_map({
+		r = { "<cmd>CellularAutomaton make_it_rain<CR>", "[R]ain" },
+		l = { "<cmd>CellularAutomaton game_of_life<CR>", "[L]ife" },
+	}, {
+		name = "Automaton",
+		prefix = "<leader>a",
+	}),
 }
-

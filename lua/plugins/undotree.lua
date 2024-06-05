@@ -1,9 +1,11 @@
 return {
 	"mbbill/undotree", -- Undo Tree.
 	event = { "InsertEnter" },
-	keys = {
-		{ "<leader>uu", "<cmd>UndotreeShow<CR><cmd>UndotreeFocus<CR>", desc = "[u] [U]ndo" },
-		{ "<leader>uq", "<cmd>UndotreeHide<CR>", desc = "[U]ndo [Q]uit" },
-	},
+	keys = Gen_map({
+		u = { "<Cmd>UndotreeToggle<CR>", "Toggle" },
+		q = { "<Cmd>UndotreeHide<CR>", "[Q]uit" },
+	}, {
+		name = "Undo",
+		prefix = "<leader>u",
+	}),
 }
-

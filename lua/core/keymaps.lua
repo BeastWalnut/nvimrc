@@ -1,22 +1,80 @@
-function Set_map(keymaps, opts)
-	opts = opts or {}
-	local name
-	if keymaps.name then
-		name = "(" .. keymaps.name .. ") "
-		keymaps.name = nil
-	else
-		name = ""
-	end
-	local mode = opts.mode or opts[1] or "n"
-	local prefix = opts.prefix or ""
-	opts[1] = nil
-	opts.mode = nil
-	opts.prefix = nil
+---@class (exact) VimMapOpt
+---@field desc string?
+---@field buffer number | nil
+---@field noremap boolean
+---@field silent boolean
+---@field nowait boolean
+---@field expr boolean
 
-	keymaps.name = nil
-	for keys, km in pairs(keymaps) do
-		local nopts = vim.tbl_extend("force", opts, { desc = name .. km[2] })
-		vim.keymap.set(mode, prefix .. keys, km[1], nopts)
+---@alias VimMode "n" | "i" | "v" | "s" | "t" | VimMode[]
+
+---@class (exact) VimMap: VimMapOpt
+---@field [1] string
+---@field [2] string | fun()
+---@field mode VimMode
+
+---@class MapDef
+---@field [1] string | fun()
+---@field [2] string
+
+---@class MapOpt: VimMapOpt
+---@field mode VimMode?
+---@field name string?
+---@field prefix string?
+---@field desc string?
+local DEFAULT_OPTS = {
+	mode = "n",
+	prefix = "",
+	noremap = true,
+	silent = true,
+	nowait = false,
+	expr = false,
+}
+
+---@param keymaps MapDef
+---@param opts MapOpt?
+---@return VimMap[]
+function Gen_map(keymaps, opts)
+	opts = vim.tbl_extend("force", DEFAULT_OPTS, opts or {})
+	local maps = {}
+	local name = ""
+	if vim.tbl_get(opts, "name") then
+		name = "(" .. opts.name .. ") "
+	end
+	---@param kmaps MapDef
+	---@param mopts MapOpt
+	local function generate(kmaps, mopts)
+		for trig, map in pairs(kmaps) do
+			if type(trig) == "number" then
+				goto continue
+			end
+			local ptrig = mopts.prefix .. trig
+			generate(map, vim.tbl_extend("force", mopts, { prefix = ptrig }))
+			local result = vim.tbl_extend("force", mopts, {
+				ptrig,
+				map[1],
+				desc = name .. map[2],
+			})
+			result.name = nil
+			result.prefix = nil
+			table.insert(maps, result)
+			::continue::
+		end
+	end
+	generate(keymaps, opts)
+	return maps
+end
+
+---@param keymaps MapDef
+---@param opts MapOpt?
+function Set_map(keymaps, opts)
+	local generated = Gen_map(keymaps, opts)
+	for _, map in ipairs(generated) do
+		local trig = map[1]
+		local func = map[2]
+		local mode = map.mode
+		map[1], map[2], map.mode = nil, nil, nil
+		vim.keymap.set(mode, trig, func, map)
 	end
 end
 
@@ -29,9 +87,7 @@ Set_map({
 	K = { ":m '<-2<Cr>gv=gv", "Move hightlight up" },
 	J = { ":m '>+1<Cr>gv=gv", "Move hightlight down" },
 }, {
-	"v",
-	silent = true,
-	noremap = true,
+	mode = "v",
 })
 
 -- Remove \n without moving the cursor
@@ -41,7 +97,7 @@ vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line", noremap = true })
 Set_map({
 	["<C-u>"] = { "<C-u>zz", "Hafl screen up" },
 	["<C-d>"] = { "<C-d>zz", "Half Screen down" },
-}, { noremap = true })
+})
 
 -- vim.keymap.set("n", "N", "Nzzzv")
 -- vim.keymap.set("n", "n", "nzzzv")
@@ -53,34 +109,34 @@ Set_map({
 -- vim.keymap.set("n", "<leader><leader>", "<cmd>so<CR>", { desc = "Source" })
 
 -- Exit insert mode
+
 Set_map({
 	jk = { "<Esc>", "Exit insert mode" },
 	kj = { "<Esc>", "Exit insert mode" },
-}, { "i" })
+}, {
+	mode = "i",
+})
 
 -- Create/Delete Split windows
 Set_map({
-	name = "Splits",
 	v = { "<C-w>v", "[V]ertically" },
 	h = { "<C-w>s", "[H]orizontally" },
 	e = { "<C-w>=", "[E]qualize" },
 	q = { "<cmd>close<CR>", "[Q]uit" },
 }, {
+	name = "Splits",
 	prefix = "<leader>s",
-	noremap = true,
-	silent = true,
 })
 
 -- Splits/Window navigation
 Set_map({
-	name = "Split Nav",
-	["<C-h>"] = { "<C-w>h", "Left" },
-	["<C-j>"] = { "<C-w>j", "Down" },
 	["<C-k>"] = { "<C-w>k", "Up" },
+	["<C-j>"] = { "<C-w>j", "Down" },
+	["<C-h>"] = { "<C-w>h", "Left" },
 	["<C-l>"] = { "<C-w>l", "Right" },
 }, {
-	{ "n", "t" },
-	noremap = true,
+	mode = { "n", "t" },
+	name = "Split Nav",
 })
 
 -- Clipboard Interactions
@@ -88,27 +144,25 @@ Set_map({
 	y = { '"+y', "[Y]ank clipboard" },
 	x = { "x", "Yank [x]" },
 }, {
-	{ "n", "v" },
+	mode = { "n", "v" },
 	prefix = "<leader>",
-	noremap = true,
 })
 
 -- Void copy/paste
 Set_map({
-	name = "Void",
 	D = { [["_d]], "[D]elete" },
 	x = { [["_x]], "X" },
-	["<leader>p"] = { [["_dP"]], "[p]" },
+	["<leader>p"] = { [["_dP"]], "Paste" },
 }, {
-	{ "n", "v" },
-	noremap = true,
+	mode = { "n", "v" },
+	name = "Void",
 })
 
 -- Number Interactions
 Set_map({
-	["+"] = { "<C-a>", "Increment Num" },
-	["-"] = { "<C-x>", "Decrement Num" },
+	["+"] = { "<C-a>", "Increment" },
+	["-"] = { "<C-x>", "Decrement" },
 }, {
 	prefix = "<leader>",
-	noremap = true,
+	name = "Number",
 })

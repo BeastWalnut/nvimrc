@@ -21,11 +21,11 @@ return {
 		end
 
 		Set_map({
-			name = "Luasnip",
 			["<M-k>"] = { next_snip, "Next" },
 			["<M-j>"] = { prev_snip, "Previous" },
 		}, {
-			{ "s", "i" },
+			name = "Luasnip",
+			mode = { "s", "i" },
 			noremap = true,
 		})
 

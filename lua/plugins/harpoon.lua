@@ -1,19 +1,17 @@
 return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",
-	keys = {
-		{ "<leader>hh", desc = "(Harpoon) Toggle" },
-		{ "<leader>ha", desc = "(Harpoon) [A]dd" },
-		{ "]h", desc = "(Harpoon) Next" },
-		{ "[h", desc = "(Harpoon) Previous" },
-		{ "gh", desc = "(Harpoon) [G]o to" },
-	},
+	keys = Gen_map({
+		["<leader>hh"] = { nil, "Toggle" },
+		["<leader>ha"] = { nil, "[A]dd" },
+		["]h"] = { nil, "Next" },
+		["[h"] = { nil, "Previous" },
+		gh = { nil, "[G]o to" },
+	}, {
+		name = "Harpoon",
+	}),
 	dependencies = { "nvim-lua/plenary.nvim" },
-	opts = {
-		settings = {
-			sync_on_ui_close = true,
-		},
-	},
+	opts = { settings = { sync_on_ui_close = true } },
 	config = function(_, opts)
 		local harpoon = require("harpoon")
 		harpoon:setup(opts)
@@ -24,7 +22,7 @@ return {
 		end
 
 		local function add_to_list()
-			harpoon:list():append()
+			harpoon:list():add()
 		end
 
 		local function next_harp()
@@ -40,16 +38,19 @@ return {
 		end
 
 		Set_map({
-			name = "Harpoon",
 			h = { toggle_menu, "Toggle" },
 			a = { add_to_list, "[A]dd" },
-		}, { prefix = "<leader>h" })
+		}, {
+			name = "Harpoon",
+			prefix = "<leader>h",
+		})
 
 		Set_map({
-			name = "Harpoon",
 			["]h"] = { next_harp, "Next" },
 			["[h"] = { prev_harp, "Previous" },
 			["gh"] = { select_harp, "[G]o to" },
+		}, {
+			name = "Harpoon",
 		})
 	end,
 }

@@ -28,8 +28,8 @@ return {
 				}, map_opts)
 
 				map_opts.mode = "n"
+				map_opts.name = "Diagnostic"
 				Set_map({
-					name = "Diagnostic",
 					["]d"] = { vim.diagnostic.goto_next, "Next" },
 					["[d"] = { vim.diagnostic.goto_prev, "Previous" },
 				}, map_opts)

@@ -11,7 +11,7 @@ local round_fun = fmt([[
 ---@param number number
 ---@return integer
 function math.round(number)
-	return math.floor(number + .5);
+	return math.floor(number + 0.5);
 end]], {})
 
 local contains_fun = fmt([[
@@ -37,11 +37,9 @@ local contains_postfix = d(1, function(_, parent)
 	)
 end)
 
-
-
 return {
-	s({ trig = "round" }, round_fun),
-	s({ trig = "contains" }, contains_fun),
+	s({ trig = "roundf" }, round_fun),
+	s({ trig = "containsf" }, contains_fun),
 	postfix({
 		trig = "@contains",
 		match_patter = "[%w%.%_%-%(%)]+$",

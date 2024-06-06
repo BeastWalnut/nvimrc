@@ -1,7 +1,7 @@
 return {
 	"williamboman/mason.nvim",
-	lazy = false,
 	dependencies = {
+		"hrsh7th/cmp-nvim-lsp",
 		"williamboman/mason-lspconfig.nvim",
 		"WhoIsSethDaniel/mason-tool-installer.nvim",
 	},
@@ -44,8 +44,8 @@ return {
 			ensure_installed = vim.tbl_keys(servers),
 		})
 
-		local cmp_nvim_lsp = require("cmp_nvim_lsp")
-		local capabilities = cmp_nvim_lsp.default_capabilities()
+		local cmp_lsp = require("cmp_nvim_lsp")
+		local capabilities = cmp_lsp.default_capabilities()
 		mason_lspconfig.setup_handlers({
 			function(name)
 				local server = servers[name] or {}

@@ -1,10 +1,6 @@
 return {
 	"neovim/nvim-lspconfig",
-	dependencies = {
-		"williamboman/mason.nvim",
-		"hrsh7th/cmp-nvim-lsp",
-		"nvim-telescope/telescope.nvim",
-	},
+	dependencies = { "williamboman/mason.nvim" },
 	event = { "BufReadPre", "BufNewFile" },
 	config = function()
 		local augroup = vim.api.nvim_create_augroup
@@ -36,12 +32,17 @@ return {
 
 				map_opts.prefix = "g"
 				Set_map({
-					d = { "<cmd>Telescope lsp_definitions<CR>", "Peek [D]eclaration" },
 					D = { vim.lsp.buf.declaration, "[G]o [D]eclaration" },
-					i = { "<cmd>Telescope lsp_implementations<CR>", "Peek [I]mplementation" },
 					I = { vim.lsp.buf.implementation, "[G]o [I]mplementation" },
 					r = { vim.lsp.buf.references, "Peek [R]eferences" },
 				}, map_opts)
+
+				if vim.g.loaded_telescope then
+					Set_map({
+						d = { "<cmd>Telescope lsp_definitions<CR>", "Peek [D]eclaration" },
+						i = { "<cmd>Telescope lsp_implementations<CR>", "Peek [I]mplementation" },
+					}, map_opts)
+				end
 
 				map_opts.mode = { "n", "v" }
 				map_opts.prefix = "<leader>"

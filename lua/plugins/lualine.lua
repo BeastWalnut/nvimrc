@@ -1,9 +1,11 @@
 return {
 	"nvim-lualine/lualine.nvim",
+	lazy = false,
 	dependencies = { "nvim-tree/nvim-web-devicons" },
 	opts = function()
 		local lazy_status = require("lazy.status")
 		return {
+			options = { theme = "codedark" },
 			sections = {
 				lualine_x = {
 					{
@@ -13,9 +15,6 @@ return {
 					},
 					{ "filetype" },
 				},
-			},
-			options = {
-				theme = "codedark",
 			},
 		}
 	end,

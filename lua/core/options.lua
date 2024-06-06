@@ -11,9 +11,9 @@ opt.wrap = false
 
 -- Indentation
 opt.tabstop = 4
-opt.softtabstop = 0
+opt.softtabstop = 4
 opt.shiftwidth = 0
-opt.expandtab = false
+opt.expandtab = true
 opt.smartindent = false
 
 -- Spelling and word detection
@@ -31,9 +31,9 @@ opt.hlsearch = false
 -- GUI
 opt.guifont = "JetBrainsMonoNL NFM15"
 opt.listchars = {
-	trail = "#",
-	tab = "│ ",
-	eol = "↲",
+    trail = "#",
+    tab = "│ ",
+    eol = "↲",
 }
 opt.list = true
 
@@ -51,19 +51,19 @@ local autocmd = vim.api.nvim_create_autocmd
 local opt_group = vim.api.nvim_create_augroup("PersonalGroup", { clear = true })
 
 autocmd("BufEnter", {
-	group = opt_group,
-	callback = function()
-		vim.opt.formatoptions:remove({ "r", "o" })
-		vim.opt_local.formatoptions:remove({ "r", "o" })
-	end,
+    group = opt_group,
+    callback = function()
+        vim.opt.formatoptions:remove({ "r", "o" })
+        vim.opt_local.formatoptions:remove({ "r", "o" })
+    end,
 })
 
 autocmd("TextYankPost", {
-	group = opt_group,
-	callback = function()
-		vim.highlight.on_yank({
-			higroup = "Visual",
-			timeout = 250,
-		})
-	end,
+    group = opt_group,
+    callback = function()
+        vim.highlight.on_yank({
+            higroup = "Visual",
+            timeout = 250,
+        })
+    end,
 })

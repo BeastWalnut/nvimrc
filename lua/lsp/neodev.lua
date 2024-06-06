@@ -1,4 +1,4 @@
 return {
-	"folke/neodev.nvim",
-	opts = { pathStrict = true },
+    "folke/neodev.nvim",
+    opts = { pathStrict = true },
 }

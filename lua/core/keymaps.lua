@@ -95,7 +95,7 @@ vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line", noremap = true })
 
 -- Move half a screen up/down
 Set_map({
-	["<C-u>"] = { "<C-u>zz", "Hafl screen up" },
+	["<C-u>"] = { "<C-u>zz", "Half screen up" },
 	["<C-d>"] = { "<C-d>zz", "Half Screen down" },
 })
 
@@ -109,7 +109,6 @@ Set_map({
 -- vim.keymap.set("n", "<leader><leader>", "<cmd>so<CR>", { desc = "Source" })
 
 -- Exit insert mode
-
 Set_map({
 	jk = { "<Esc>", "Exit insert mode" },
 	kj = { "<Esc>", "Exit insert mode" },
@@ -152,7 +151,7 @@ Set_map({
 Set_map({
 	D = { [["_d]], "[D]elete" },
 	x = { [["_x]], "X" },
-	["<leader>p"] = { [["_dP"]], "Paste" },
+	["<leader>p"] = { [["_dP]], "Paste" },
 }, {
 	mode = { "n", "v" },
 	name = "Void",

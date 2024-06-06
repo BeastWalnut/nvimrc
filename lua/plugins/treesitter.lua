@@ -1,7 +1,8 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	lazy = false,
+	lazy = true,
 	build = ":TSUpdate",
+	event = { "BufRead", "BufNewFile" },
 	dependencies = {
 		"nvim-treesitter/playground",
 		"nvim-treesitter/nvim-treesitter-textobjects",
@@ -9,13 +10,17 @@ return {
 	opts = {
 		playground = { enable = true },
 		ensure_installed = {
+			"c",
 			"lua",
+			"vim",
+			"vimdoc",
+			"query",
+			"comment",
 			"javascript",
 			"typescript",
 			"java",
 			"rust",
 		},
-		sync_install = false,
 		auto_install = true,
 		highlight = {
 			enable = true,

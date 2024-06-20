@@ -105,9 +105,6 @@ Set_map({
 -- Supposedly evil operation fix
 -- vim.keymap.set("n", "Q", "<nop>")
 
--- Run current lua program
--- vim.keymap.set("n", "<leader><leader>", "<cmd>so<CR>", { desc = "Source" })
-
 -- Exit insert mode
 Set_map({
     jk = { "<Esc>", "Exit insert mode" },
@@ -125,17 +122,6 @@ Set_map({
 }, {
     name = "Splits",
     prefix = "<leader>s",
-})
-
--- Splits/Window navigation
-Set_map({
-    ["<C-k>"] = { "<C-w>k", "Up" },
-    ["<C-j>"] = { "<C-w>j", "Down" },
-    ["<C-h>"] = { "<C-w>h", "Left" },
-    ["<C-l>"] = { "<C-w>l", "Right" },
-}, {
-    mode = { "n", "t" },
-    name = "Split Nav",
 })
 
 -- Clipboard Interactions

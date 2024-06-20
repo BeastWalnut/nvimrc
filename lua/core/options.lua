@@ -20,7 +20,7 @@ opt.smartindent = false
 opt.ignorecase = true
 opt.smartcase = true
 
-opt.undodir = vim.fn.stdpath("data") .. "\\undo"
+opt.undodir = vim.fn.stdpath("data") .. "/undo"
 opt.undofile = true
 opt.swapfile = false
 

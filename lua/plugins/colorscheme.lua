@@ -13,11 +13,8 @@ return {
                 Todo = { fg = "iris" },
                 ["@comment.todo"] = { link = "Todo" },
                 ["@comment.note"] = { link = "@text.note" },
+                ["@constant.macro"] = { link = "Macro" },
             },
         },
-        config = function(_, opts)
-            require("rose-pine").setup(opts)
-            vim.cmd("colorscheme rose-pine")
-        end,
     },
 }

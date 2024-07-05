@@ -93,7 +93,7 @@ return {
             mapping = cmp.mapping.preset.insert({
                 ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
                 ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
-                ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-f>"] = cmp.mapping.scroll_docs(4),
                 ["<C-m>"] = cmp.mapping.complete(),
                 ["<C-e>"] = cmp.mapping.abort(),
@@ -101,6 +101,7 @@ return {
             }),
             sources = cmp.config.sources({
                 { name = "luasnip" },
+                { name = "lazydev" },
                 { name = "nvim_lsp" },
             }, {
                 { name = "buffer" },

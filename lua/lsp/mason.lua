@@ -9,6 +9,10 @@ return {
         lua_ls = {
             settings = {
                 Lua = {
+                    completion = {
+                        callSnippet = "Replace",
+                        keywordSnippet = "Disable",
+                    },
                     diagnostics = {
                         neededFileStatus = { ["no-unkown"] = "Opened" },
                         groupSeverity = {
@@ -45,11 +49,10 @@ return {
         })
 
         local cmp_lsp = require("cmp_nvim_lsp")
-        local capabilities = cmp_lsp.default_capabilities()
         mason_lspconfig.setup_handlers({
             function(name)
                 local server = servers[name] or {}
-                server.capabilities = capabilities
+                server.capabilities = cmp_lsp.default_capabilities()
                 require("lspconfig")[name].setup(server)
             end,
         })

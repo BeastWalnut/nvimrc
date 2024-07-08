@@ -1,7 +1,6 @@
-return {
+local lualine = {
     "nvim-lualine/lualine.nvim",
     lazy = false,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
     opts = function()
         local lazy_status = require("lazy.status")
         return {
@@ -21,4 +20,8 @@ return {
     config = function(_, opts)
         require("lualine").setup(opts)
     end,
+}
+return {
+    "nvim-tree/nvim-web-devicons",
+    lualine,
 }

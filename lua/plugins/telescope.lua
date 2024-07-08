@@ -1,12 +1,6 @@
-return {
+local telescope = {
     "nvim-telescope/telescope.nvim",
     tag = "0.1.5",
-    dependencies = {
-        "nvim-lua/plenary.nvim",
-        "nvim-tree/nvim-web-devicons",
-        "nvim-telescope/telescope-file-browser.nvim",
-        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-    },
     keys = Gen_map({
         f = { "<cmd>Telescope find_files<CR>", "[F]iles" },
         s = { "<cmd>Telescope live_grep<CR>", "[S]tring" },
@@ -20,17 +14,11 @@ return {
         name = "Find",
         prefix = "<leader>f",
     }),
-    opts = function()
+    cmd = "Telescope",
+    config = function()
         local actions = require("telescope.actions")
-        return {
-            extensions = {
-                file_browser = {
-                    mappings = {
-                        i = { ["<bs>"] = false },
-                        n = { l = actions.select_default },
-                    },
-                },
-            },
+        local telescope = require("telescope")
+        telescope.setup({
             defaults = {
                 path_display = { shorten = 3 },
                 mappings = {
@@ -41,14 +29,22 @@ return {
                     },
                 },
             },
+            extensions = {
+                file_browser = { mappings = { i = { ["<bs>"] = false } } },
+            },
             pickers = { find_files = { follow = true } },
-        }
-    end,
-    config = function(_, opts)
-        local telescope = require("telescope")
-        telescope.setup(opts)
+        })
 
         telescope.load_extension("fzf")
         telescope.load_extension("file_browser")
     end,
+}
+return {
+    {
+        "nvim-lua/plenary.nvim",
+        "nvim-tree/nvim-web-devicons",
+        "nvim-telescope/telescope-file-browser.nvim",
+        { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    },
+    telescope,
 }

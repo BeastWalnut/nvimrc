@@ -4,7 +4,6 @@ return {
     dependencies = {
         "hrsh7th/cmp-buffer",
         "hrsh7th/cmp-path",
-        "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
     },
     opts = function()
@@ -39,11 +38,10 @@ return {
             TypeParameter = "",
         }
 
-        local luasnip = require("luasnip")
         return {
             snippet = {
                 expand = function(args)
-                    luasnip.lsp_expand(args.body)
+                    require("luasnip").lsp_expand(args.body)
                 end,
             },
             confirmation = { completeopt = "menu,menuone,noselect" },
@@ -55,10 +53,7 @@ return {
                     vim_item.kind = icons[kind] or "?"
                     local item = entry:get_completion_item()
 
-                    local menu = kind
-                    if item.detail then
-                        menu = item.detail
-                    end
+                    local menu = item.detail or kind
                     vim_item.menu = "│ " .. menu
 
                     local source = entry.source.name
@@ -86,27 +81,25 @@ return {
         vim.api.nvim_set_hl(0, "CmpItemMenu", { fg = "#C792EA" })
         local cmp = require("cmp")
 
-        cmp.setup({
-            confirmation = opts.confirmation,
-            formatting = opts.formatting,
-            snippet = opts.snippet,
-            mapping = cmp.mapping.preset.insert({
-                ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
-                ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
-                ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-                ["<C-f>"] = cmp.mapping.scroll_docs(4),
-                ["<C-m>"] = cmp.mapping.complete(),
-                ["<C-e>"] = cmp.mapping.abort(),
-                ["<CR>"] = cmp.mapping.confirm({ select = true }),
-            }),
-            sources = cmp.config.sources({
-                { name = "luasnip" },
-                { name = "lazydev" },
-                { name = "nvim_lsp" },
-            }, {
-                { name = "buffer" },
-                { name = "path" },
-            }),
+        opts.mapping = cmp.mapping.preset.insert({
+            ["<C-k>"] = cmp.mapping.select_prev_item(), -- previous suggestion
+            ["<C-j>"] = cmp.mapping.select_next_item(), -- next suggestion
+            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+            ["<C-m>"] = cmp.mapping.complete(),
+            ["<C-e>"] = cmp.mapping.abort(),
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
         })
+
+        opts.sources = cmp.config.sources({
+            { name = "luasnip" },
+            { name = "lazydev" },
+            { name = "nvim_lsp" },
+        }, {
+            { name = "buffer" },
+            { name = "path" },
+        })
+
+        cmp.setup(opts)
     end,
 }

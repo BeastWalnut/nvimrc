@@ -1,68 +1,60 @@
-return {
+local mason = {
     "williamboman/mason.nvim",
-    dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "williamboman/mason-lspconfig.nvim",
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
-    },
     opts = {
-        lua_ls = {
-            settings = {
-                Lua = {
-                    completion = {
-                        callSnippet = "Replace",
-                        keywordSnippet = "Disable",
+        ui = {
+            icons = {
+                package_installed = "✓",
+                package_pending = "➜",
+                package_uninstalled = "✗",
+            },
+        },
+    },
+}
+
+local servers = {
+    lua_ls = {
+        settings = {
+            Lua = {
+                completion = {
+                    callSnippet = "Replace",
+                    keywordSnippet = "Disable",
+                },
+                diagnostics = {
+                    neededFileStatus = { ["no-unkown"] = "Opened" },
+                    groupSeverity = {
+                        duplicate = "Error",
+                        ambiguity = "Error",
+                        strong = "Error",
+                        ["type-check"] = "Error",
                     },
-                    diagnostics = {
-                        neededFileStatus = { ["no-unkown"] = "Opened" },
-                        groupSeverity = {
-                            duplicate = "Error",
-                            ambiguity = "Error",
-                            strong = "Error",
-                            ["type-check"] = "Error",
-                        },
-                        severity = { ["ambiguity-1"] = "Warning!" },
-                        unusedLocalExclude = { "_*" },
-                    },
+                    severity = { ["ambiguity-1"] = "Warning!" },
+                    unusedLocalExclude = { "_*" },
                 },
             },
         },
-        jsonls = {},
-        tsserver = {},
     },
-    config = function(_, servers)
-        local mason = require("mason")
-        mason.setup({
-            ui = {
-                icons = {
-                    package_installed = "✓",
-                    package_pending = "➜",
-                    package_uninstalled = "✗",
-                },
-            },
-        })
+    jsonls = {},
+    tsserver = {},
+}
 
-        local mason_lspconfig = require("mason-lspconfig")
-        mason_lspconfig.setup({
-            automatic_installation = true,
-            ensure_installed = vim.tbl_keys(servers),
-        })
-
-        local cmp_lsp = require("cmp_nvim_lsp")
-        mason_lspconfig.setup_handlers({
+local mason_lspconfig = {
+    "williamboman/mason-lspconfig.nvim",
+    lazy = false,
+    opts = {
+        automatic_installation = true,
+        ensure_installed = vim.tbl_keys(servers),
+        handlers = {
             function(name)
                 local server = servers[name] or {}
-                server.capabilities = cmp_lsp.default_capabilities()
+                server.capabilities = require("cmp_nvim_lsp").default_capabilities()
                 require("lspconfig")[name].setup(server)
             end,
-        })
-        require("mason-tool-installer").setup({
-            ensure_installed = {
-                "prettierd",
-                "prettier",
-                "stylua",
-                "eslint_d",
-            },
-        })
-    end,
+        },
+    },
+}
+
+return {
+    "hrsh7th/cmp-nvim-lsp",
+    mason_lspconfig,
+    mason,
 }

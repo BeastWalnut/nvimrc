@@ -1,6 +1,5 @@
 return {
     "neovim/nvim-lspconfig",
-    dependencies = { "williamboman/mason.nvim" },
     event = { "BufReadPre", "BufNewFile" },
     config = function()
         local augroup = vim.api.nvim_create_augroup

@@ -1,13 +1,14 @@
-local rustaceanvim = {
-    "mrcjkb/rustaceanvim",
-    version = "^4",
-    ft = "rust",
-    config = function()
-        vim.g.rustaceanvim = { tools = { enable_clippy = true } }
-    end,
-}
+local M = { "mrcjkb/rustaceanvim" }
+
+M.ft = "rust"
+M.version = "^4"
+M.config = function()
+    vim.g.rustaceanvim = {
+        tools = { enable_clippy = true },
+    }
+end
 
 return {
     "neovim/nvim-lspconfig",
-    rustaceanvim,
+    M,
 }

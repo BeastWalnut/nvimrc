@@ -1,5 +1,8 @@
-return {
-    "numToStr/Comment.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    opts = {},
-}
+local M = { "numToStr/Comment.nvim" }
+
+M.event = { "BufReadPre", "BufNewFile" }
+M.config = function()
+    require("Comment").setup()
+end
+
+return M

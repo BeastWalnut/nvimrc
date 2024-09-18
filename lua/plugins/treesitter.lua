@@ -1,4 +1,17 @@
-local ensure_installed = {
+local M = { "nvim-treesitter/nvim-treesitter" }
+
+M.build = ":TSUpdate"
+M.event = { "BufReadPre", "BufNewFile" }
+M.dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" }
+M.opts = {
+    highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+    },
+    auto_install = true,
+    indent = { enable = true },
+}
+M.opts.ensure_installed = {
     "c",
     "lua",
     "vim",
@@ -10,8 +23,7 @@ local ensure_installed = {
     "java",
     "rust",
 }
-
-local textobjects = {
+M.opts.textobjects = {
     select = {
         enable = true,
         lookahead = true,
@@ -25,22 +37,8 @@ local textobjects = {
         },
     },
 }
+M.config = function(_, opts)
+    require("nvim-treesitter.configs").setup(opts)
+end
 
-return {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
-    config = function()
-        require("nvim-treesitter.configs").setup({
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = false,
-            },
-            auto_install = true,
-            ensure_installed = ensure_installed,
-            textobjects = textobjects,
-            indent = { enable = true },
-        })
-    end,
-}
+return M

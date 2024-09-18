@@ -1,4 +1,5 @@
-return {
-    "ThePrimeagen/vim-be-good",
-    cmd = { "VimBeGood" },
-}
+local M = { "ThePrimeagen/vim-be-good" }
+
+M.cmd = { "VimBeGood" }
+
+return M

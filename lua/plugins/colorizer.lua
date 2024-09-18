@@ -1,15 +1,14 @@
-return {
-    "norcalli/nvim-colorizer.lua",
-    ft = { "markdown", "json" },
-    cmd = "ColorizerAttachToBuffer",
-    name = "colorizer",
-    opts = {
-        mode = "foreground",
-    },
-    config = function(_, opts)
-        require("colorizer").setup({
-            "markdown",
-            "json",
-        }, opts)
-    end,
-}
+local M = { "norcalli/nvim-colorizer.lua" }
+
+M.ft = "json"
+M.name = "colorizer"
+M.cmd = "ColorizerAttachToBuffer"
+M.opts = { mode = "foreground" }
+M.config = function(_, opts)
+    require("colorizer").setup({
+        "markdown",
+        "json",
+    }, opts)
+end
+
+return M
